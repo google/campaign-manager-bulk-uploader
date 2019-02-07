@@ -1,0 +1,236 @@
+<section>
+  <md-toolbar class="md-primary md-hue-2">
+    <div class="md-toolbar-tools breadcrumbs">
+      <a href="/"> Projects </a>
+
+      <md-icon>keyboard_arrow_right</md-icon>
+
+      <span flex>Edit {{ project.name }}</span>
+    </div>
+  </md-toolbar>
+
+  <md-card flex="70" flex-offset="15" class="project-edit-card">
+    <div class="info-bar" layout="row">
+      <div flex="50">
+        <md-input-container class="md-block">
+          <label>ID</label> <input value="{{ clonedProject.id }}" disabled />
+        </md-input-container>
+
+        <md-input-container class="md-block">
+          <label>Created at</label>
+          <input
+            value="{{ clonedProject.createdAt | date: 'short' }}"
+            disabled
+          />
+        </md-input-container>
+
+        <md-input-container class="md-block">
+          <label>Updated at</label>
+          <input
+            value="{{ clonedProject.updatedAt | date: 'short' }}"
+            disabled
+          />
+        </md-input-container>
+
+        <md-input-container
+          ng-show="!!clonedProject.lastRunAt"
+          class="md-block"
+        >
+          <label>Last run at</label>
+          <input
+            value="{{ clonedProject.lastRunAt | date: 'short' }}"
+            disabled
+          />
+        </md-input-container>
+
+        <md-input-container
+          ng-show="!!clonedProject.lastCompletedAt"
+          class="md-block"
+        >
+          <label>Last completed at</label>
+          <input
+            value="{{ clonedProject.lastCompletedAt | date: 'short' }}"
+            disabled
+          />
+        </md-input-container>
+      </div>
+
+      <div class="info-actions" flex="50">
+        <md-button ng-disabled="true"> {{ status }} </md-button>
+
+        <md-button
+          class="md-raised md-warn"
+          ng-click="cancelRun()"
+          ng-show="status == 'RUNNING'"
+        >
+          <md-progress-circular
+            class="md-warn md-hue-3"
+            md-diameter="20px"
+            md-mode="indeterminate"
+          ></md-progress-circular>
+          Cancel
+        </md-button>
+
+        <md-button
+          class="md-raised md-accent"
+          ng-click="startRun()"
+          ng-show="status == 'INITIALIZED'"
+        >
+          <md-icon>play_arrow</md-icon>
+          Run
+        </md-button>
+
+        <md-button
+          class="md-raised md-accent"
+          ng-click="startRun()"
+          ng-hide="status == 'RUNNING' || status == 'INITIALIZED'"
+        >
+          <md-icon>play_arrow</md-icon>
+          Re-Run
+        </md-button>
+
+        <md-button class="md-raised" ng-click="log()">
+          <md-icon>history</md-icon>
+          Log
+        </md-button>
+
+        <md-button class="md-raised" ng-click="sdf()">
+          <md-icon>file_copy</md-icon>
+          SDF
+        </md-button>
+      </div>
+    </div>
+
+    <form ng-submit="update()" name="projectForm" class="padded-form">
+      <md-input-container class="md-block">
+        <label>Name</label>
+        <input
+          type="text"
+          required
+          md-maxlength="50"
+          name="name"
+          ng-model="clonedProject.name"
+        />
+        <div ng-messages="projectForm.name.$error" role="alert">
+          <div ng-message="required">This is required.</div>
+          <div ng-message="md-maxlength">
+            The name must be less than 50 characters long.
+          </div>
+        </div>
+      </md-input-container>
+
+      <md-input-container class="md-block">
+        <label>Profile ID</label>
+        <input
+          type="text"
+          required
+          name="profileId"
+          ng-model="clonedProject.profileId"
+        />
+        <div ng-messages="projectForm.profileId.$error" role="alert">
+          <div ng-message="required">This is required.</div>
+        </div>
+      </md-input-container>
+
+      <div class="uploader" nv-file-drop uploader="feedUploader">
+        <md-list>
+          <md-subheader class="md-no-sticky">
+            Feed
+            <div layout="row" class="file-input">
+              <input type="file" flex nv-file-select uploader="feedUploader" />
+              <div class="hint">
+                Or, read from a
+                <a href ng-click="showSheetsDialog($event)">Google Sheets URL</a
+                >.
+              </div>
+            </div>
+          </md-subheader>
+
+          <md-list-item ng-show="feedUploader.isUploading">
+            <md-progress-linear
+              md-mode="determinate"
+              ng-value="feedUploader.progress"
+            ></md-progress-linear>
+          </md-list-item>
+
+          <md-list-item ng-repeat="item in feedUploader.queue">
+            <p ng-bind="item.file.name"></p>
+          </md-list-item>
+
+          <md-list-item ng-show="project.feed" ng-click="downloadFeed()">
+            <md-icon>insert_drive_file</md-icon>
+            <p ng-bind="project.feed.filename"></p>
+            <md-icon
+              class="md-secondary"
+              aria-label="Delete"
+              ng-click="removeFeed()"
+              >delete</md-icon
+            >
+          </md-list-item>
+
+          <md-list-item ng-hide="project.feed">
+            <md-icon>error_outline</md-icon>
+            <p>No feed uploaded.</p>
+          </md-list-item>
+        </md-list>
+      </div>
+
+      <div class="uploader" nv-file-drop uploader="assetsUploader">
+        <md-list>
+          <md-subheader class="md-no-sticky">
+            Assets
+            <div layout="row" class="file-input">
+              <input
+                type="file"
+                nv-file-select
+                multiple
+                uploader="assetsUploader"
+              />
+            </div>
+          </md-subheader>
+
+          <md-list-item ng-show="assetsUploader.isUploading">
+            <md-progress-linear
+              md-mode="determinate"
+              ng-value="assetsUploader.progress"
+            ></md-progress-linear>
+          </md-list-item>
+
+          <md-list-item ng-repeat="item in assetsUploader.queue">
+            <p ng-bind="item.file.name"></p>
+          </md-list-item>
+
+          <md-list-item ng-repeat="asset in project.assets">
+            <md-icon>insert_drive_file</md-icon>
+            <p ng-bind="asset.filename"></p>
+            <md-icon
+              class="md-secondary"
+              aria-label="Delete"
+              ng-click="removeAsset(asset)"
+              >delete</md-icon
+            >
+          </md-list-item>
+
+          <md-list-item ng-hide="project.assets.length">
+            <md-icon>error_outline</md-icon>
+            <p>No assets uploaded.</p>
+          </md-list-item>
+        </md-list>
+      </div>
+
+      <md-input-container class="md-block">
+        <label>Notes</label>
+        <textarea
+          type="text"
+          name="notes"
+          ng-model="clonedProject.notes"
+        ></textarea>
+      </md-input-container>
+
+      <div>
+        <md-button class="md-raised md-primary" type="submit">Update</md-button>
+        <a href="/" class="md-button md-secondary">Cancel</a>
+      </div>
+    </form>
+  </md-card>
+</section>

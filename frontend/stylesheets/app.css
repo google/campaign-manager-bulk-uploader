@@ -1,0 +1,129 @@
+/*
+
+Copyright 2019 Google LLC
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+*/
+
+html,
+body {
+  font-family: "Roboto", "Helvetica", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.projects-list {
+  padding: 0;
+}
+
+.projects-list .md-list-item-text {
+  outline: none;
+}
+
+.project-edit-card {
+  margin-bottom: 64px;
+}
+
+.pagination {
+  text-align: center;
+  margin-top: 24px;
+  margin-bottom: 64px;
+}
+
+.new-button {
+  position: absolute;
+  top: 32px;
+  right: 48px;
+}
+
+.info-bar {
+  padding: 16px 16px 0;
+  color: rgba(0, 0, 0, 0.54);
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.info-bar h2 {
+  margin: 0;
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.info-bar .info-actions {
+  text-align: right;
+}
+
+.info-bar .info-actions md-progress-circular {
+  display: inline-block;
+  vertical-align: middle;
+  padding-right: 4px;
+}
+
+.info-bar md-input-container:last-child {
+  margin-bottom: 0;
+}
+
+.hint {
+  font-size: 12px;
+  line-height: 14px;
+  color: grey;
+}
+
+.uploader {
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  margin-bottom: 32px;
+}
+
+.uploader .file-input {
+  padding-top: 16px;
+}
+
+.uploader md-list {
+  padding: 0;
+}
+
+.padded-form {
+  padding: 16px;
+}
+
+.breadcrumbs a,
+.breadcrumbs span {
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 0 6px;
+  margin: 6px 8px;
+}
+
+md-toolbar {
+  margin-bottom: 60px;
+}
+
+.auth-settings {
+  padding: 16px 16px 0;
+  color: rgba(0, 0, 0, 0.54);
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  margin-bottom: 48px;
+}
+
+.auth-settings h2 {
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.code-syntax {
+  font-family: monospace;
+}

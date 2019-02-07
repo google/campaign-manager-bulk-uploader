@@ -1,0 +1,78 @@
+<section>
+  <md-toolbar class="md-primary md-hue-2">
+    <div class="md-toolbar-tools breadcrumbs">
+      <a href ng-click="back()"> Back </a>
+
+      <md-icon>keyboard_arrow_right</md-icon>
+
+      <span flex>Settings</span>
+    </div>
+  </md-toolbar>
+
+  <md-card flex="70" flex-offset="15" layout-padding>
+    <form name="settingsForm" ng-submit="save()">
+      <div class="auth-settings">
+        <h2>HTTP Basic Auth</h2>
+
+        <div layout="row">
+          <div flex="50">
+            <md-input-container class="md-block">
+              <label>Username</label>
+              <input
+                type="text"
+                required
+                md-maxlength="50"
+                name="username"
+                ng-model="clonedSettings.username"
+              />
+              <div ng-messages="settingsForm.username.$error" role="alert">
+                <div ng-message="required">This is required.</div>
+                <div ng-message="md-maxlength">
+                  The username must be less than 50 characters long.
+                </div>
+              </div>
+            </md-input-container>
+          </div>
+
+          <div flex="50">
+            <md-input-container class="md-block">
+              <label>Password</label>
+              <input
+                required
+                md-maxlength="50"
+                name="password"
+                type="password"
+                ng-model="clonedSettings.password"
+              />
+              <div ng-messages="settingsForm.password.$error" role="alert">
+                <div ng-message="required">This is required.</div>
+                <div ng-message="md-maxlength">
+                  The password must be less than 50 characters long.
+                </div>
+              </div>
+            </md-input-container>
+          </div>
+        </div>
+      </div>
+
+      <md-input-container class="md-block">
+        <label>config.json</label>
+        <textarea
+          required
+          name="config"
+          ng-model="clonedSettings.config"
+          class="code-syntax"
+        ></textarea>
+
+        <div ng-messages="settingsForm.config.$error" role="alert">
+          <div ng-message="required">This is required.</div>
+        </div>
+      </md-input-container>
+
+      <div>
+        <md-button class="md-raised md-primary" type="submit">Save</md-button>
+        <a href="/" class="md-button md-secondary">Cancel</a>
+      </div>
+    </form>
+  </md-card>
+</section>

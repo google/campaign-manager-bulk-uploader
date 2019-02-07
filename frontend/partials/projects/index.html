@@ -1,0 +1,58 @@
+<section>
+  <md-toolbar class="md-primary md-hue-2">
+    <div class="md-toolbar-tools breadcrumbs">
+      <span flex>Projects</span>
+
+      <md-button class="md-fab new-button" ng-click="new()">
+        <md-icon>add</md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-card flex="70" flex-offset="15" ng-show="projects.length">
+    <md-list class="projects-list">
+      <md-list-item
+        ng-repeat="project in projects"
+        class="md-2-line"
+        ng-click="edit(project)"
+      >
+        <md-icon class="md-avatar-icon">folder</md-icon>
+        <div class="md-list-item-text">
+          <h3>{{ project.name }}</h3>
+          <p>Last updated {{ project.updatedAt | date: "short" }}</p>
+        </div>
+        <md-icon
+          class="md-secondary md-icon-button"
+          aria-label="Edit"
+          ng-click="edit(project)"
+          >edit</md-icon
+        >
+        <md-icon
+          class="md-secondary md-icon-button"
+          aria-label="Delete"
+          ng-click="delete(project)"
+          >delete</md-icon
+        >
+        <md-divider ng-if="!$last"></md-divider>
+      </md-list-item>
+    </md-list>
+  </md-card>
+
+  <div class="pagination" flex="70" flex-offset="15" ng-show="projects.length">
+    <md-button
+      ng-disabled="!hasPrevious"
+      class="md-primary"
+      ng-click="previous()"
+    >
+      <md-icon>keyboard_arrow_left</md-icon>
+    </md-button>
+
+    <md-button ng-disabled="!hasNext" class="md-primary" ng-click="next()">
+      <md-icon>keyboard_arrow_right</md-icon>
+    </md-button>
+  </div>
+
+  <div flex="70" flex-offset="15" ng-show="!projects.length">
+    There are currently no projects to display.
+  </div>
+</section>
