@@ -6,9 +6,14 @@ This tool is a Python and Angular application to showcase the [Campaign Manager 
 
 ## Prerequisites
 
-1.  Download the [Google Cloud SDK](https://cloud.google.com/storage/docs/gsutil_install) for your platform.
-2.  Download the [Google App Engine Python SDK](https://cloud.google.com/appengine/downloads) for your platform.
-3.  For App Engine environment, a vendor lock-in is needed for the third-party tools that are used in the application. Run the following command to install those:
+1.  Ensure Python 2.7 is installed.
+2.  Download the [Google Cloud SDK](https://cloud.google.com/storage/docs/gsutil_install) for your platform.
+3.  Download the [Google App Engine Python SDK](https://cloud.google.com/appengine/downloads) for your platform.
+4.  Clone or download this repository to your computer:
+
+        git clone https://github.com/google/campaign-manager-bulk-uploader
+
+5.  For App Engine environment, a vendor lock-in is needed for the third-party tools that are used in the application. Run the following command to install those:
 
         pip install -t lib -r requirements.txt
 
@@ -81,7 +86,13 @@ Running a local server for App Engine applications:
 
 ## Samples
 
-A sample CSV feed, and its sample assets (two images) are in the `samples` directory of this repo.
+A sample CSV feed, and its sample assets are in the `samples` directory of this repository.
+
+## Quick deployment with Google Cloud Shell
+
+Click the button below to quickly deploy this application with Google Cloud Shell. Follow the on-screen instructions.
+
+[![Quick deployment with Google Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.svg)](https://console.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2Fgoogle%2Fcampaign-manager-bulk-uploader&cloudshell_print=GOOGLE_CLOUD_SHELL.txt&cloudshell_tutorial=GOOGLE_CLOUD_SHELL.md)
 
 ## Authors
 

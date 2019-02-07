@@ -1,0 +1,5 @@
+Congratulations! You're almost done deploying Bulk Uploader.
+
+The repository code has already been installed in this shell. To deploy the application to App Engine please type the following command and hit the enter key:
+
+./scripts/deploy.sh
