@@ -211,7 +211,7 @@ class DCMJob(object):
   def asset_to_upload(self, asset_filename):
     asset_key = None
     for asset in self.project.assets:
-      if asset_filename == blobstore.BlobInfo(asset).filename:
+      if asset_filename.lower() == blobstore.BlobInfo(asset).filename.lower():
         asset_key = asset
         break
 
