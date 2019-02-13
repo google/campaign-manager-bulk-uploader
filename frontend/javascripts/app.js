@@ -499,7 +499,7 @@ App.controller("EditProjectController", function(
   };
 
   $scope.sdf = function() {
-    console.log("SDF!");
+    // TODO: Implement SDF generator.
   };
 });
 
@@ -518,6 +518,10 @@ App.controller("LogProjectController", function(
   $scope.hasNext = projectLoggers["hasNext"];
   $scope.previousCursor = projectLoggers["previousCursor"];
   $scope.nextCursor = projectLoggers["nextCursor"];
+  $scope.retries = 0;
+
+  var MAX_RETRIES = 500;
+  var RETRY_TIMEOUT = 5000;
 
   $scope.previous = function() {
     $location.search("lc", $scope.previousCursor);
@@ -527,15 +531,20 @@ App.controller("LogProjectController", function(
     $location.search("lc", $scope.nextCursor);
   };
 
-  var polling = function() {
+  var checkStatus = function() {
+    $scope.retries = $scope.retries + 1;
     var cursor = $route.current.params.lc;
+
     $http
       .get("/api/projects/" + $scope.projectId + "/log", {
         params: { lc: cursor }
       })
       .then(function(response) {
         $scope.projectLoggers = response.data["entities"];
-        nextLoad();
+
+        if ($scope.retries < MAX_RETRIES) {
+          nextLoad();
+        }
       });
   };
 
@@ -547,10 +556,10 @@ App.controller("LogProjectController", function(
 
   var nextLoad = function() {
     cancelNextLoad();
-    loadPromise = $timeout(polling, 5000);
+    loadPromise = $timeout(checkStatus, RETRY_TIMEOUT);
   };
 
-  polling();
+  checkStatus();
 
   $scope.$on("$destroy", function() {
     cancelNextLoad();
