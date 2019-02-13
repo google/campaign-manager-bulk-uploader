@@ -14,6 +14,7 @@
 
 from csv import DictReader
 from google.appengine.ext import blobstore
+import model
 
 
 class DCMJob(object):
@@ -102,6 +103,12 @@ class DCMJob(object):
           'campaign_default_landing_page_url']].strip()
 
       if campaign_name not in self.dcm_dao.campaigns:
+        logger = model.ProjectLogger(
+            message=('Creating campaign "%s"' % campaign_name),
+            project=self.project.key,
+            severity=model.ProjectLoggerSeverity.INFO)
+        logger.put()
+
         self.dcm_dao.create_campaign(advertiser_id, campaign_name,
                                      campaign_start_date, campaign_end_date,
                                      campaign_default_landing_page_name,
@@ -152,6 +159,12 @@ class DCMJob(object):
         creative_backup_image_click_through_url = row[self.mappings[
             'creative_backup_image_click_through_url']].strip()
 
+      logger = model.ProjectLogger(
+          message=('Creating creative "%s"' % creative_name),
+          project=self.project.key,
+          severity=model.ProjectLoggerSeverity.INFO)
+      logger.put()
+
       self.dcm_dao.upload_asset(asset_type, creative_name, creative_file,
                                 creative_size, advertiser_id, campaign['id'],
                                 ad_type, creative_backup_image_file,
@@ -174,6 +187,12 @@ class DCMJob(object):
       site_id = row[self.mappings['site_id']]
       creative_size = row[self.mappings['creative_size']].strip().lower()
       placement_name = row[self.mappings['placement_name']].strip()
+
+      logger = model.ProjectLogger(
+          message=('Creating placement "%s"' % placement_name),
+          project=self.project.key,
+          severity=model.ProjectLoggerSeverity.INFO)
+      logger.put()
 
       self.dcm_dao.create_placement(placement_name, creative_size, campaign,
                                     site_id)
@@ -201,6 +220,12 @@ class DCMJob(object):
       placement_name = row[self.mappings['placement_name']].strip()
       campaign_name = row[self.mappings['campaign_name']].strip()
       campaign = self.dcm_dao.get_campaign_from_name(campaign_name)
+
+      logger = model.ProjectLogger(
+          message=('Creating ad "%s"' % ad_name),
+          project=self.project.key,
+          severity=model.ProjectLoggerSeverity.INFO)
+      logger.put()
 
       self.dcm_dao.create_ad(campaign, creative_name, ad_name, ad_start_date,
                              ad_end_date, ad_priority, ad_hard_cutoff, ad_type,

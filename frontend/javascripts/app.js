@@ -453,9 +453,15 @@ App.controller("EditProjectController", function(
                               "feed.csv",
                               { type: "text/csv" }
                             );
-                            $scope.feedUploader.addToQueue(file);
-                            $scope.clonedProject.sheetsFeedUrl = result;
-                            $scope.update();
+                            $scope.clonedProject.sheetsFeedUrl = result.trim();
+                            $http
+                              .put(
+                                "/api/projects/" + $scope.project.id,
+                                $scope.clonedProject
+                              )
+                              .then(function(response) {
+                                $scope.feedUploader.addToQueue(file);
+                              });
                           },
                           function(response) {
                             $mdToast.show(
