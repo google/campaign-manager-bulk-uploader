@@ -251,28 +251,22 @@ App.controller("EditProjectController", function(
 ) {
   $scope.project = project;
   $scope.clonedProject = angular.copy($scope.project);
+  $scope.retries = 0;
+
+  var MAX_RETRIES = 500;
+  var RETRY_TIMEOUT = 5000;
 
   var checkStatus = function() {
+    $scope.retries = $scope.retries + 1;
+
     $http
       .get("/api/projects/" + $scope.project.id + "/status")
       .then(function(response) {
-        var oldStatus = $scope.status;
-        var newStatus = response.data.status;
+        $scope.status = response.data.status;
 
-        if (
-          oldStatus != "COMPLETED" &&
-          !!oldStatus &&
-          newStatus == "COMPLETED"
-        ) {
-          $mdToast.show($mdToast.simple().textContent("Completed!"));
+        if ($scope.retries < MAX_RETRIES) {
+          nextLoad();
         }
-
-        if (oldStatus != "ERROR" && !!oldStatus && newStatus == "ERROR") {
-          $mdToast.show($mdToast.simple().textContent("Error!"));
-        }
-
-        $scope.status = newStatus;
-        nextLoad();
       });
   };
 
@@ -284,7 +278,7 @@ App.controller("EditProjectController", function(
 
   var nextLoad = function() {
     cancelNextLoad();
-    loadPromise = $timeout(checkStatus, 5000);
+    loadPromise = $timeout(checkStatus, RETRY_TIMEOUT);
   };
 
   checkStatus();
@@ -350,9 +344,11 @@ App.controller("EditProjectController", function(
   };
 
   $scope.startRun = function() {
+    $scope.retries = 0;
     $http
       .post("/api/projects/" + $scope.project.id + "/run")
       .then(function(response) {
+        $scope.status = "RUNNING";
         checkStatus();
 
         $mdToast
@@ -415,6 +411,7 @@ App.controller("EditProjectController", function(
       .placeholder("Google Sheet URL")
       .ariaLabel("Google Sheet URL")
       .targetEvent($event)
+      .initialValue($scope.clonedProject.sheetsFeedUrl)
       .required(true)
       .ok("Import")
       .cancel("Cancel");
@@ -457,6 +454,8 @@ App.controller("EditProjectController", function(
                               { type: "text/csv" }
                             );
                             $scope.feedUploader.addToQueue(file);
+                            $scope.clonedProject.sheetsFeedUrl = result;
+                            $scope.update();
                           },
                           function(response) {
                             $mdToast.show(

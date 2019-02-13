@@ -54,7 +54,7 @@ def as_dict(project):
       'id': project_id,
       'name': project.name,
       'profileId': project.profile_id,
-      # 'credentials': json.loads(project.credentials),
+      'sheetsFeedUrl': project.sheets_feed_url,
       'notes': project.notes,
       'feedUploadUrl':
           blobstore.create_upload_url('/api/projects/' + str(project_id) +
@@ -137,7 +137,8 @@ class ProjectHandler(ApiHandler):
     project_id = int(project_id)
     data = json.loads(self.request.body)
     project = model.update_project(project_id, data['name'], data['profileId'],
-                                   data['feed'], data['assets'], data['notes'])
+                                   data['feed'], data['assets'],
+                                   data['sheetsFeedUrl'], data['notes'])
     self.as_json(as_dict(project))
 
   def delete(self, project_id):

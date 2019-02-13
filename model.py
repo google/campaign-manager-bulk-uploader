@@ -68,6 +68,7 @@ class Project(ndb.Model):
   status = msgprop.EnumProperty(
       ProjectStatus, required=True, default=ProjectStatus.INITIALIZED)
   feed = ndb.BlobKeyProperty()
+  sheets_feed_url = ndb.StringProperty()
   assets = ndb.BlobKeyProperty(repeated=True)
   created_at = ndb.DateTimeProperty(auto_now_add=True)
   updated_at = ndb.DateTimeProperty(auto_now_add=True)
@@ -149,11 +150,18 @@ def create_project(name, profile_id, credentials):
   return project
 
 
-def update_project(project_id, name, profile_id, feed, assets, notes=''):
+def update_project(project_id,
+                   name,
+                   profile_id,
+                   feed,
+                   assets,
+                   sheets_feed_url='',
+                   notes=''):
   key = ndb.Key(Project, project_id)
   project = key.get()
   project.name = name
   project.profile_id = profile_id
+  project.sheets_feed_url = sheets_feed_url
   project.notes = notes
   project.feed = blobstore.BlobKey(feed['key']) if feed else None
   project.assets = [blobstore.BlobKey(a['key']) for a in assets]
