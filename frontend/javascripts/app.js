@@ -18,7 +18,8 @@ var App = angular.module("App", [
   "ngRoute",
   "ngMaterial",
   "ngMessages",
-  "angularFileUpload"
+  "angularFileUpload",
+  "ngSanitize"
 ]);
 
 App.config(function($routeProvider) {
@@ -190,7 +191,8 @@ App.controller("NewProjectController", function(
   $rootScope,
   $http,
   $location,
-  $mdToast
+  $mdToast,
+  $mdDialog
 ) {
   $scope.save = function() {
     var project = {
@@ -201,14 +203,34 @@ App.controller("NewProjectController", function(
     $mdToast.show($mdToast.simple().textContent("Saving..."));
 
     gapi.load("auth2", function() {
-      var auth2 = gapi.auth2.init({
-        clientId: BulkUploader.CLIENT_ID,
-        discoveryDocs: [
-          "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"
-        ],
-        scope:
-          "https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/dfatrafficking"
-      });
+      try {
+        var auth2 = gapi.auth2.init({
+          clientId: BulkUploader.CLIENT_ID,
+          discoveryDocs: [
+            "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"
+          ],
+          scope:
+            "https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/dfatrafficking"
+        });
+      } catch (error) {
+        var confirm = $mdDialog
+          .confirm()
+          .title("Credentials are missing or incorrect")
+          .htmlContent(
+            "<p>Please add your credentials in the <strong>config.json</strong> section of the <strong>Settings</strong> page.</p>"
+          )
+          .ok("Go to Settings")
+          .cancel("Cancel");
+
+        $mdDialog.show(confirm).then(
+          function() {
+            $location.path("/settings");
+          },
+          function() {
+            // Do nothing.
+          }
+        );
+      }
 
       auth2.grantOfflineAccess().then(function(result) {
         if (result["error"]) {
