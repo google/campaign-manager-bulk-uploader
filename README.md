@@ -38,7 +38,11 @@ Now, you can choose to either run this locally for development purposes, or depl
 
         gcloud app deploy --project=your-project-id
 
-2.  To view your newly deployed application running, you can open a browser with:
+2.  Now, upload the indexes to Datastore:
+
+        gcloud datastore indexes create index.yaml --project=your-project-id
+
+3.  To view your newly deployed application running, you can open a browser with:
 
         gcloud app browse --project=your-project-id
 

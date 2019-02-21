@@ -26,6 +26,7 @@ echo "Deploying to App Engine..."
 
 pip install -t lib -r requirements.txt --upgrade
 gcloud app deploy --project=$REPLY
+gcloud datastore indexes create index.yaml --project=$REPLY
 
 echo "Complete!"
 
