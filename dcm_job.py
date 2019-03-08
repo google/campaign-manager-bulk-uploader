@@ -131,11 +131,22 @@ class DCMJob(object):
     for row in all_creatives:
       campaign_name = row[self.mappings['campaign_name']].strip()
       campaign = self.dcm_dao.get_campaign_from_name(campaign_name)
+      campaign_id = campaign['id']
       creative_name = row[self.mappings['creative_name']].strip()
       ad_type = row[self.mappings['ad_type']].strip().lower()
       advertiser_id = row[self.mappings['advertiser_id']].strip()
       creative_size = row[self.mappings['creative_size']].strip()
       creative_filename = row[self.mappings['creative_filename']].strip()
+      creative_id = row[self.mappings['creative_id']].strip()
+
+      if creative_id:
+        logger = model.ProjectLogger(
+            message=('Associating creative ID "%s"' % creative_id),
+            project=self.project.key,
+            severity=model.ProjectLoggerSeverity.INFO)
+        logger.put()
+        self.dcm_dao.associate_creative_id(campaign_id, creative_id)
+        continue
 
       if 'tracker' in ad_type:
         continue
@@ -166,7 +177,7 @@ class DCMJob(object):
       logger.put()
 
       self.dcm_dao.upload_asset(asset_type, creative_name, creative_file,
-                                creative_size, advertiser_id, campaign['id'],
+                                creative_size, advertiser_id, campaign_id,
                                 ad_type, creative_backup_image_file,
                                 creative_backup_image_filename,
                                 creative_backup_image_click_through_url)
@@ -205,6 +216,7 @@ class DCMJob(object):
         continue
 
       creative_name = row[self.mappings['creative_name']].strip()
+      creative_id = row[self.mappings['creative_id']].strip()
       ad_name = row[self.mappings['ad_name']].strip()
       creative_rotation_type = row[self.mappings[
           'creative_rotation_type']].strip().lower()
@@ -227,11 +239,11 @@ class DCMJob(object):
           severity=model.ProjectLoggerSeverity.INFO)
       logger.put()
 
-      self.dcm_dao.create_ad(campaign, creative_name, ad_name, ad_start_date,
-                             ad_end_date, ad_priority, ad_hard_cutoff, ad_type,
-                             ad_click_through_url, ad_landing_page_url_suffix,
-                             creative_landing_page_url, creative_rotation_type,
-                             placement_name)
+      self.dcm_dao.create_ad(
+          campaign, creative_id, creative_name, ad_name, ad_start_date,
+          ad_end_date, ad_priority, ad_hard_cutoff, ad_type,
+          ad_click_through_url, ad_landing_page_url_suffix,
+          creative_landing_page_url, creative_rotation_type, placement_name)
 
   def asset_to_upload(self, asset_filename):
     asset_key = None

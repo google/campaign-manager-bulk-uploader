@@ -136,6 +136,7 @@ class DCMDAO(object):
 
   def create_ad(self,
                 campaign,
+                creative_id,
                 creative_name,
                 ad_name,
                 ad_start_date,
@@ -154,8 +155,12 @@ class DCMDAO(object):
       creative_assignment = {'active': True}
 
       if 'tracker' not in ad_type:
-        creative = self.creatives[creative_name]
-        creative = self.get_creative(creative['id']).execute()
+        if creative_id:
+          cached_creative = self.creatives[creative_id]
+        else:
+          cached_creative = self.creatives[creative_name]
+
+        creative = self.get_creative(cached_creative['id']).execute()
         timeout = 0
 
         while not creative['active'] and timeout < max_timeout:
@@ -305,11 +310,11 @@ class DCMDAO(object):
       return self.ads[ad_name]
     except http.HttpError, e:
       if e.resp.status in [403, 500, 503] and retry_count < self.MAX_RETRIES:
-        return self.create_ad(campaign, creative_name, ad_name, ad_start_date,
-                              ad_end_date, priority, hard_cutoff, ad_type,
-                              click_through_url, landing_page_url_suffix,
-                              creative_landing_page_url, creative_rotation_type,
-                              retry_count + 1)
+        return self.create_ad(
+            campaign, creative_id, creative_name, ad_name, ad_start_date,
+            ad_end_date, priority, hard_cutoff, ad_type, click_through_url,
+            landing_page_url_suffix, creative_landing_page_url,
+            creative_rotation_type, retry_count + 1)
       else:
         raise
 
@@ -416,6 +421,14 @@ class DCMDAO(object):
                                                  retry_count + 1)
       else:
         raise
+
+  def associate_creative_id(self, campaign_id, creative_id):
+    self.creatives[creative_id] = {'id': creative_id}
+
+    association = {'creativeId': creative_id}
+
+    self.insert_creative_associations(campaign_id, association)
+    return self.creatives[creative_id]
 
   def upload_asset(self,
                    asset_type,
