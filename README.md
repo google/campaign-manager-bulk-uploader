@@ -15,7 +15,7 @@ This tool is a Python and Angular application to showcase the [Campaign Manager 
 
 5.  For App Engine environment, a vendor lock-in is needed for the third-party tools that are used in the application. Run the following command to install those:
 
-        pip install -t lib -r requirements.txt
+        pip install --no-cache-dir --upgrade --quiet --target lib --requirement requirements.txt
 
 This will save a local copy of all the required third-party tools to a `lib` directory.
 
@@ -97,6 +97,14 @@ A sample CSV feed, and its sample assets are in the `samples` directory of this 
 Click the button below to quickly deploy this application with Google Cloud Shell. Follow the on-screen instructions.
 
 [![Quick deployment with Google Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.svg)](https://console.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2Fgoogle%2Fcampaign-manager-bulk-uploader&cloudshell_print=GOOGLE_CLOUD_SHELL.txt&cloudshell_tutorial=GOOGLE_CLOUD_SHELL.md)
+
+## The consent screen verification
+
+The credentials you create to authorize requests to both Drive and Campaign Manager's API need to have the consent screen properly configured. To remove the consent screen warnings the application needs to follow steps toward verification. The following messaging can be utilized to help pass verification:
+
+    This application uses `https://www.googleapis.com/auth/dfatrafficking` to handle creative and ad trafficking tasks to Campaign Manager's API. It uses `https://www.googleapis.com/auth/drive.readonly` to access Google Sheets that are then converted to CSV format and saved to this application as a feed that tells the application how to trafficking ads.
+
+    coconate@google.com from Customer Solution Engineering has built this application as a reference application. See: https://github.com/google/campaign-manager-bulk-uploader
 
 ## Authors
 
