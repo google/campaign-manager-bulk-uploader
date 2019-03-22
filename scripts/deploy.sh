@@ -18,16 +18,19 @@
 #
 ###########################################################################
 
-read -p "$(tput setaf 3)Enter your Project ID:$(tput sgr 0) "
-
-gcloud config set project $REPLY
+echo "Installing dependencies..."
+pip install --no-cache-dir --upgrade --quiet --target lib --requirement requirements.txt
+echo "Done."
+echo ""
 
 echo "Deploying to App Engine..."
+gcloud app deploy --project=$1
+echo "Done."
+echo ""
 
-pip install --no-cache-dir --upgrade --quiet --target lib --requirement requirements.txt
-gcloud app deploy --project=$REPLY
-gcloud datastore indexes create index.yaml --project=$REPLY
+echo "Writing indexes to App Engine..."
+gcloud datastore indexes create index.yaml --project=$1
+echo "Done."
+echo ""
 
-echo "Complete!"
-
-gcloud app browse --project=$REPLY
+gcloud app browse --project=$1

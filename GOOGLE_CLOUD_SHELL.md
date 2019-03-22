@@ -8,7 +8,7 @@ This tool is a Python and Angular application to showcase the [Campaign Manager 
 
 Run this script from the command line:
 
-        ./scripts/deploy.sh
+        ./scripts/deploy.sh <your-project-id>
 
 ## Your newly deployed application
 
