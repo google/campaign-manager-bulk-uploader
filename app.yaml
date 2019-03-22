@@ -30,6 +30,10 @@ handlers:
     script: main.app
     secure: always
 
+  - url: /privacy
+    static_files: frontend/privacy.html
+    upload: frontend/privacy.html
+
   - url: /api/.*
     script: main.app
 
