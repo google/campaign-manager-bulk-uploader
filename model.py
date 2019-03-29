@@ -22,6 +22,7 @@ from google.appengine.datastore.datastore_query import Cursor
 from protorpc import messages
 import datetime
 import time
+import traceback
 
 PER_PAGE = 10
 
@@ -233,6 +234,8 @@ def project_run(key):
     dcm_job = DCMJob(project, dcm_dao)
     dcm_job.start()
   except Exception, e:
+    print(traceback.format_exc())
+
     project.status = ProjectStatus.ERROR
     project.last_completed_at = datetime.datetime.utcnow()
     project.updated_at = datetime.datetime.utcnow()

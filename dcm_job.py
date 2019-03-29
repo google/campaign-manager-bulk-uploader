@@ -23,10 +23,8 @@ class DCMJob(object):
     if not project.feed:
       raise ValueError('A feed is required!')
 
-    if len(project.assets) == 0:
-      raise ValueError('Assets are required!')
-
-    self.csv = blobstore.BlobReader(project.feed).read().splitlines()
+    self.csv = blobstore.BlobReader(
+        project.feed).read().decode('utf-8-sig').encode('utf-8').splitlines()
     self.mappings = {
         'ad_end_date':
             'Ad End Date',
