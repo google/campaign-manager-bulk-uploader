@@ -104,7 +104,7 @@ The credentials you create to authorize requests to both Drive and Campaign Mana
 
     This application uses `https://www.googleapis.com/auth/dfatrafficking` to handle creative and ad trafficking tasks to Campaign Manager's API. It uses `https://www.googleapis.com/auth/drive.readonly` to access Google Sheets that are then converted to CSV format and saved to this application as a feed that tells the application how to trafficking ads.
 
-    coconate@google.com from Customer Solution Engineering has built this application as a reference application. See: https://github.com/google/campaign-manager-bulk-uploader
+    coconate@google.com from Customer Solutions Engineering has built this application as a reference application. See: https://github.com/google/campaign-manager-bulk-uploader
 
 ## Authors
 
