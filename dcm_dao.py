@@ -15,11 +15,14 @@
 from apiclient import http
 from datetime import datetime
 from dateutil import tz
+from google.appengine.api import urlfetch
 from google.appengine.ext import blobstore
 from googleapiclient.discovery import build
 from oauth2client.client import Credentials
 import httplib2
 import time
+
+urlfetch.set_default_fetch_deadline(300)
 
 
 class DCMDAO(object):
