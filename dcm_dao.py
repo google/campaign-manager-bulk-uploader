@@ -27,7 +27,7 @@ class DCMDAO(object):
   MAX_RETRIES = 5
   MAX_TIMEOUT = 1800
   API_NAME = 'dfareporting'
-  API_VERSION = 'v3.2'
+  API_VERSION = 'v3.3'
 
   def __init__(self, project):
     credentials = Credentials.new_from_json(project.credentials)
