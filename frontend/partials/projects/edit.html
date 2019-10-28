@@ -108,14 +108,14 @@
         <input
           type="text"
           required
-          md-maxlength="50"
+          md-maxlength="140"
           name="name"
           ng-model="clonedProject.name"
         />
         <div ng-messages="projectForm.name.$error" role="alert">
           <div ng-message="required">This is required.</div>
           <div ng-message="md-maxlength">
-            The name must be less than 50 characters long.
+            The name must be less than 140 characters long.
           </div>
         </div>
       </md-input-container>

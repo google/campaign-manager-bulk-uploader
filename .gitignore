@@ -3,3 +3,4 @@ samples/config.json
 env
 lib
 .gitbackup
+.tool-versions

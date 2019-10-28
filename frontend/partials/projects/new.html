@@ -11,20 +11,28 @@
     </div>
   </md-toolbar>
 
-  <md-card flex=70 flex-offset=15 layout-padding>
+  <md-card flex="70" flex-offset="15" layout-padding>
     <form name="projectForm" ng-submit="save()">
       <md-input-container class="md-block">
         <label>Name</label>
-        <input type="text" required md-maxlength="50" name="name" ng-model="name">
+        <input
+          type="text"
+          required
+          md-maxlength="140"
+          name="name"
+          ng-model="name"
+        />
         <div ng-messages="projectForm.name.$error" role="alert">
           <div ng-message="required">This is required.</div>
-          <div ng-message="md-maxlength">The description must be less than 50 characters long.</div>
+          <div ng-message="md-maxlength">
+            The description must be less than 140 characters long.
+          </div>
         </div>
       </md-input-container>
 
       <md-input-container class="md-block">
         <label>Profile ID</label>
-        <input type="text" required name="profileId" ng-model="profileId">
+        <input type="text" required name="profileId" ng-model="profileId" />
         <div ng-messages="projectForm.profileId.$error" role="alert">
           <div ng-message="required">This is required.</div>
         </div>
